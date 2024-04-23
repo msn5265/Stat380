@@ -1,0 +1,71 @@
+---
+title: "Stat380FinalProject"
+format: pdf
+editor: visual
+---
+
+```{r}
+library(dplyr)
+# reading in data sets
+pincodes <- read.csv("~/Downloads/Cities_in_India_with_pincodes.csv")
+# making all columns lowercase, renaming the pincode column and making the pincode data type into an integer
+onlinefoods <- read.csv("~/Downloads/onlinefoods.csv")
+onlinefoods <- onlinefoods %>%
+  rename_all(tolower) %>%
+  rename(pincode = pin.code) %>%
+  mutate(pincode = as.integer(pincode))
+# making all columns lowercase and making the pincode data type into an integer
+pincodes <- pincodes %>%
+  rename_all(tolower) %>%
+  mutate(pincode = as.integer(pincode))
+# left joining the two data frames into one so that each pincode now has a state, district, and location
+df <- left_join(onlinefoods, pincodes, by = "pincode")
+# renaming columns and changing the gender column to a factor for ease of use
+# removing the X column because I am not sure what it is for
+df <- df %>%
+  rename(marital_status = marital.status) %>% 
+  mutate(gender = as.factor(gender)) %>%
+  rename(monthly_income = monthly.income) %>%
+  rename(educational_qualifications = educational.qualifications) %>%
+  rename(family_size = family.size) %>%
+  select(-x)
+  
+```
+
+```{r}
+# summary statistics for each data type
+summary(df)
+```
+
+```{r}
+# proportion table for gender 
+prop.table(table(df$gender)) * 100
+```
+
+```{r}
+prop.table(table(df$marital_status)) * 100
+```
+
+```{r}
+prop.table(table(df$occupation)) * 100
+```
+
+```{r}
+prop.table(table(df$monthly_income)) * 100
+```
+
+```{r}
+prop.table(table(df$educational_qualifications)) * 100
+```
+
+```{r}
+prop.table(table(df$district)) * 100
+```
+
+```{r}
+prop.table(table(df$location)) * 100
+```
+
+```{r}
+
+```
